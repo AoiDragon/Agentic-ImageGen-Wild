@@ -33,11 +33,22 @@ Agentic image generation equips image generators with web search agents to handl
 <a id="savanna"></a>
 ## 🌿 Savanna Benchmark
 
-**Savanna** evaluates image generation in the wild with **500 prompts across 16 subcategories in 5 domains** (*Entertainment, Sports, Fashion, Products, Culture*):
+### Automated Query Synthesis Pipeline
 
-- **Time-bounded & confusion-filtered:** Synthesized from July 2026 news headlines with search restricted to ≤ 3 days post-publication, retaining only targets with high retrieval confusion.
-- **Human-verified:** Each sample provides a verified ground-truth reference and evaluation rubrics, independently checked by three annotators.
-- **Challenging for frontier models:** Even the strongest frontier-model agent harness reaches only **51.5** in search accuracy, and end-to-end search-enabled generators peak at **34.9** in generation score.
+To continually construct time-sensitive, high-confusion prompts without relying on static entity lists, we build a four-stage automated pipeline from live news:
+
+1. **World Snapshot Collection:** Collect recent news and supplementary reports, restricting all subsequent searches to ≤ 3 days after publication to simulate **temporal novelty**.
+2. **Entity Extraction:** Extract target entities either directly from text (*text-oriented*) or from secondary objects visible only in retrieved photos (*image-oriented*, introducing **spatial entanglement**).
+3. **Confusion Filtering & Verification:** Retain only queries with retrieval confusion κ(u) ≥ 0.5 (**semantic crowding**) and cross-validate positive images to guarantee a single unambiguous ground truth.
+4. **Prompt Assembly:** Crop a clean ground-truth reference and compose a natural generation prompt paired with evaluation rubrics.
+
+<p align="center">
+  <img src="asset/query_synthesis.png" alt="Automated four-stage prompt synthesis pipeline from news headlines to verified prompts and references." width="100%">
+</p>
+
+### Benchmark Overview
+
+Built with this pipeline from July 2026 news and verified by three independent annotators, **Savanna** comprises **500 prompts across 16 subcategories in 5 domains** (*Entertainment, Sports, Fashion, Products, Culture*). Even the strongest frontier-model agent harness reaches only **51.5** in search accuracy, and end-to-end search-enabled generators peak at **34.9** in generation score.
 
 <p align="center">
   <img src="asset/savanna_overview.png" alt="Savanna domain and subcategory distribution, with example prompts and reference images from each of its five domains." width="100%">
